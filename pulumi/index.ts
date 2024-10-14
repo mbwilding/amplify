@@ -134,7 +134,7 @@ const cdn = new aws.cloudfront.Distribution("cdn", {
 // Create a DNS A record to point to the CDN.
 const subDomain = config.get("subDomain");
 if (domain && subDomain && zone) {
-    const record = new aws.route53.Record(`amplify.${domain}`, {
+    const record = new aws.route53.Record(`${subDomain}.${domain}`, {
         name: subDomain,
         zoneId: zone.zoneId,
         type: "A",
@@ -153,3 +153,5 @@ export const originURL = pulumi.interpolate`http://${bucketWebsite.websiteEndpoi
 export const originHostname = bucketWebsite.websiteEndpoint;
 export const cdnURL = pulumi.interpolate`https://${cdn.domainName}`;
 export const cdnHostname = cdn.domainName;
+export const customUrl = pulumi.interpolate`https://${subDomain}.${domain}`;
+export const customHostname = pulumi.interpolate`${subDomain}.${domain}`;

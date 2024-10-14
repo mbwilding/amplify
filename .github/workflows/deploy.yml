@@ -25,7 +25,8 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - run: bun install --cwd pulumi
+      - name: Package Restore
+        run: bun install --cwd pulumi
       # - name: Create Stack
       #   run: pulumi stack init $PULUMI_GLOBALS 2> /dev/null
       - name: Update Stack
