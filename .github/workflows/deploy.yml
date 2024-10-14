@@ -8,7 +8,7 @@ on:
 env:
   PULUMI_DIRECTORY: pulumi
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-  PULUMI_GLOBALS: --color always --emoji --non-interactive --stack amplify --cwd {{ env.PULUMI_DIRECTORY }}
+  PULUMI_GLOBALS: --color always --emoji --non-interactive --stack amplify --cwd ${{ env.PULUMI_DIRECTORY }}
 
 jobs:
   preview:
