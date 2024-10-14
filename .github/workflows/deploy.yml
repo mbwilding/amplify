@@ -31,7 +31,7 @@ jobs:
       - name: Create Stack
         run: pulumi stack init $STACK_NAME --cwd pulumi
       - name: Update Stack
-        run: pulumi up --stack $STACK_NAME --yes
+        run: pulumi up --stack $STACK_NAME --cwd pulumi --yes
       # - name: Update Stack
       #   uses: pulumi/actions@v6
       #   with:
