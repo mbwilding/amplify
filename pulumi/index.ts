@@ -133,21 +133,21 @@ const cdn = new aws.cloudfront.Distribution("cdn", {
     },
 });
 
-// // Create a DNS A record to point to the CDN.
-// if (combinedDomain && zone) {
-//     const record = new aws.route53.Record(combinedDomain, {
-//         name: combinedDomain,
-//         zoneId: zone.zoneId,
-//         type: "A",
-//         aliases: [
-//             {
-//                 name: cdn.domainName,
-//                 zoneId: cdn.hostedZoneId,
-//                 evaluateTargetHealth: true,
-//             }
-//         ],
-//     }, { dependsOn: certificate });
-// }
+// Create a DNS A record to point to the CDN.
+if (combinedDomain && zone) {
+    const record = new aws.route53.Record(combinedDomain, {
+        name: combinedDomain,
+        zoneId: zone.zoneId,
+        type: "A",
+        aliases: [
+            {
+                name: cdn.domainName,
+                zoneId: cdn.hostedZoneId,
+                evaluateTargetHealth: true,
+            }
+        ],
+    }, { dependsOn: certificate });
+}
 
 // Export the URLs and hostnames of the bucket and distribution.
 export const originURL = pulumi.interpolate`http://${bucketWebsite.websiteEndpoint}`;
