@@ -2,5 +2,7 @@ config:
   amplify:errorDocument: error.html
   amplify:indexDocument: index.html
   amplify:path: ../www
+  amplify:domain: wildingstudios.com
+  amplify:subDomain: amplify
   aws:region: ap-southeast-4
   pulumi:template: static-website-aws-typescript
