@@ -7,6 +7,7 @@ on:
 
 env:
   STACK_NAME: amplify
+  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
 jobs:
   preview:
@@ -31,5 +32,3 @@ jobs:
           command: up
           stack-name: $STACK_NAME
           work-dir: pulumi
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
