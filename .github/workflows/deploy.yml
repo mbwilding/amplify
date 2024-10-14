@@ -29,4 +29,4 @@ jobs:
       # - name: Create Stack
       #   run: pulumi stack init $PULUMI_GLOBALS 2> /dev/null
       - name: Update Stack
-        run: pulumi up $PULUMI_GLOBALS
+        run: pulumi up --yes $PULUMI_GLOBALS
