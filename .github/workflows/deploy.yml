@@ -6,8 +6,9 @@ on:
       - main
 
 env:
+  PULUMI_DIRECTORY: pulumi
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-  PULUMI_GLOBALS: --color always --emoji --non-interactive --stack amplify --cwd pulumi
+  PULUMI_GLOBALS: --color always --emoji --non-interactive --stack amplify --cwd {{ env.PULUMI_DIRECTORY }}
 
 jobs:
   preview:
@@ -26,7 +27,7 @@ jobs:
         with:
           bun-version: latest
       - name: Package Restore
-        run: bun install --cwd pulumi
+        run: bun install --cwd $PULUMI_DIRECTORY
       # - name: Create Stack
       #   run: pulumi stack init $PULUMI_GLOBALS 2> /dev/null
       - name: Update Stack
