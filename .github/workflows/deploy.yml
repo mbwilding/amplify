@@ -29,7 +29,7 @@ jobs:
       - name: Test
         run: echo $STACK_NAME
       - name: Create Stack
-        run: pulumi stack init $STACK_NAME --cwd pulumi
+        run: pulumi stack init $STACK_NAME --cwd pulumi || echo "Stack '$STACK_NAME' already exists"
       - name: Update Stack
         run: pulumi up --stack $STACK_NAME --cwd pulumi --yes
       # - name: Update Stack
