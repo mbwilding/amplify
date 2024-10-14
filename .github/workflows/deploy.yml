@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Set Variables
         run: |
-          echo 'PULUMI_GLOBALS="--color always --emoji --non-interactive --stack amplify --cwd ${{ env.PULUMI_DIRECTORY }}"' >> $GITHUB_ENV
+          echo "PULUMI_GLOBALS=--color always --emoji --non-interactive --stack amplify --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
