@@ -27,7 +27,7 @@ jobs:
           bun-version: latest
       - run: bun install --cwd pulumi
       - name: Create Stack
-        run: pulumi stack init $STACK_NAME
+        run: pulumi stack init --copy-config-from dev
       - name: Update Stack
         uses: pulumi/actions@v6
         with:
