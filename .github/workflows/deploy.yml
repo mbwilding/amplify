@@ -9,7 +9,7 @@ env:
   STACK_NAME: amplify
   PULUMI_DIRECTORY: pulumi
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-  PULUMI_GLOBALS: --color always --emoji --non-interactive --stack $STACK_NAME --cwd $PULUMI_DIRECTORY
+  PULUMI_GLOBALS: ${{ format('--color always --emoji --non-interactive --stack {} --cwd {}', env.STACK_NAME, env.PULUMI_DIRECTORY) }}
 
 jobs:
   preview:
