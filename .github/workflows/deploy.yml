@@ -25,9 +25,10 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - run: npm install --prefix pulumi
-      - id: stack-create
-        run: pulumi stack select $STACK_NAME --create || echo "Stack '$STACK_NAME' already exists"
-      - uses: pulumi/actions@v6
+      - name: Create Stack
+        run: pulumi stack init $STACK_NAME
+      - name: Update Stack
+        uses: pulumi/actions@v6
         with:
           command: up
           stack-name: $STACK_NAME
