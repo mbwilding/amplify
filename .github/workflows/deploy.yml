@@ -28,8 +28,14 @@ jobs:
       - run: bun install --cwd pulumi
       - name: Test
         run: echo $STACK_NAME
+      # - name: Create Stack
+      #   run: pulumi stack init $STACK_NAME
       - name: Create Stack
-        run: pulumi stack init $STACK_NAME
+        uses: pulumi/actions@v6
+        with:
+          command: stack init
+          stack-name: $STACK_NAME
+          work-dir: pulumi
       - name: Update Stack
         uses: pulumi/actions@v6
         with:
