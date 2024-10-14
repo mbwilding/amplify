@@ -42,17 +42,19 @@ const bucketFolder = new synced_folder.S3BucketFolder("bucket-folder", {
 
 // Custom domain
 const domain = config.get("domain");
+const subDomain = config.get("subDomain");
+const combinedDomain = subDomain && domain ? `${subDomain}.${domain}` : (subDomain || domain || undefined);
 let certificate: Certificate | undefined;
 let zone: pulumi.Output<GetZoneResult> | undefined;
 
-if (domain) {
+if (combinedDomain) {
     // Look up your existing Route 53 hosted zone.
     zone = aws.route53.getZoneOutput({ name: domain });
 
     // Provision a new ACM certificate.
     certificate = new aws.acm.Certificate("certificate",
         {
-            domainName: domain,
+            domainName: combinedDomain,
             validationMethod: "DNS",
         },
         {
@@ -76,7 +78,7 @@ if (domain) {
 
 // Create a CloudFront CDN to distribute and cache the website.
 const cdn = new aws.cloudfront.Distribution("cdn", {
-    aliases: domain ? [domain] : [],
+    aliases: combinedDomain ? [combinedDomain] : [],
     viewerCertificate: certificate ? {
         cloudfrontDefaultCertificate: false,
         acmCertificateArn: certificate.arn,
@@ -132,10 +134,9 @@ const cdn = new aws.cloudfront.Distribution("cdn", {
 });
 
 // Create a DNS A record to point to the CDN.
-const subDomain = config.get("subDomain");
-if (domain && subDomain && zone) {
-    const record = new aws.route53.Record(`${subDomain}.${domain}`, {
-        name: subDomain,
+if (combinedDomain && zone) {
+    const record = new aws.route53.Record(combinedDomain, {
+        name: combinedDomain,
         zoneId: zone.zoneId,
         type: "A",
         aliases: [
@@ -153,5 +154,5 @@ export const originURL = pulumi.interpolate`http://${bucketWebsite.websiteEndpoi
 export const originHostname = bucketWebsite.websiteEndpoint;
 export const cdnURL = pulumi.interpolate`https://${cdn.domainName}`;
 export const cdnHostname = cdn.domainName;
-export const customUrl = pulumi.interpolate`https://${subDomain}.${domain}`;
-export const customHostname = pulumi.interpolate`${subDomain}.${domain}`;
+export const customUrl = pulumi.interpolate`https://${combinedDomain}`;
+export const customHostname = pulumi.interpolate`${combinedDomain}`;
