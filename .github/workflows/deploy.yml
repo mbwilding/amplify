@@ -26,8 +26,10 @@ jobs:
         with:
           bun-version: latest
       - run: bun install --cwd pulumi
+      - name: Test
+        run: echo $STACK_NAME
       - name: Create Stack
-        run: pulumi stack init --copy-config-from dev
+        run: pulumi stack init $STACK_NAME
       - name: Update Stack
         uses: pulumi/actions@v6
         with:
