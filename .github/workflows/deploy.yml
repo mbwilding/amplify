@@ -7,7 +7,9 @@ on:
 
 env:
   STACK_NAME: amplify
+  PULUMI_DIRECTORY: pulumi
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  PULUMI_GLOBALS: --color always --emoji --non-interactive --stack $STACK_NAME --cwd $PULUMI_DIRECTORY
 
 jobs:
   preview:
@@ -26,15 +28,7 @@ jobs:
         with:
           bun-version: latest
       - run: bun install --cwd pulumi
-      - name: Test
-        run: echo $STACK_NAME
-      - name: Create Stack
-        run: pulumi stack init $STACK_NAME --cwd pulumi || echo "Stack '$STACK_NAME' already exists"
+      # - name: Create Stack
+      #   run: pulumi stack init $PULUMI_GLOBALS 2> /dev/null
       - name: Update Stack
-        run: pulumi up --stack $STACK_NAME --cwd pulumi --yes
-      # - name: Update Stack
-      #   uses: pulumi/actions@v6
-      #   with:
-      #     command: up
-      #     stack-name: $STACK_NAME
-      #     work-dir: pulumi
+        run: pulumi up --stack $PULUMI_GLOBALS
