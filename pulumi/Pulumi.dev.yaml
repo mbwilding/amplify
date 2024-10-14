@@ -1,6 +1,6 @@
 config:
   amplify:errorDocument: error.html
   amplify:indexDocument: index.html
-  amplify:path: ./www
+  amplify:path: ../www
   aws:region: ap-southeast-4
   pulumi:template: static-website-aws-typescript
