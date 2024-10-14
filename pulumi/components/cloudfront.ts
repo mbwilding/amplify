@@ -5,9 +5,9 @@ import { BucketV2, BucketWebsiteConfigurationV2 } from "@pulumi/aws/s3";
 export function createCdn(
     bucket: BucketV2,
     bucketWebsite: BucketWebsiteConfigurationV2,
-    certificate: Certificate | undefined,
-    combinedDomain: string | undefined,
-    errorDocument: string | undefined,
+    certificate?: Certificate,
+    combinedDomain?: string,
+    errorDocument?: string,
 ) {
     const cdn = new aws.cloudfront.Distribution("cdn", {
         aliases: combinedDomain ? [combinedDomain] : [],
@@ -53,11 +53,11 @@ export function createCdn(
             },
         },
         priceClass: "PriceClass_100",
-        customErrorResponses: [{
+        customErrorResponses: errorDocument ? [{
             errorCode: 404,
             responseCode: 404,
             responsePagePath: `/${errorDocument}`,
-        }],
+        }] : undefined,
         restrictions: {
             geoRestriction: {
                 restrictionType: "none",

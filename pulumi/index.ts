@@ -4,13 +4,7 @@ import { createWebsiteBucket } from "./components/s3";
 import { createCustomDomain, createCustomDomainCdnRecord } from "./components/route53";
 import { createCdn } from "./components/cloudfront";
 
-const {
-    path,
-    indexDocument,
-    errorDocument,
-    domain,
-    subDomain
-} = getConfig();
+const { path, indexDocument, errorDocument, domain, subDomain } = getConfig();
 
 const { bucket, bucketWebsite } = createWebsiteBucket(path, indexDocument, errorDocument);
 const { zone, certificate, combinedDomain } = createCustomDomain(domain, subDomain);

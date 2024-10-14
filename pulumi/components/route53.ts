@@ -5,8 +5,8 @@ import { GetZoneResult } from "@pulumi/aws/route53";
 import { Distribution } from "@pulumi/aws/cloudfront";
 
 export function createCustomDomain(
-    domain: string | undefined,
-    subDomain: string | undefined
+    domain?: string,
+    subDomain?: string
 ) {
     const combinedDomain = subDomain && domain ? `${subDomain}.${domain}` : (subDomain || domain || undefined);
     let certificate: Certificate | undefined;
@@ -47,9 +47,9 @@ export function createCustomDomain(
 
 export function createCustomDomainCdnRecord(
     cdn: Distribution,
-    certificate: Certificate | undefined,
-    zone: pulumi.Output<GetZoneResult> | undefined,
-    combinedDomain: string | undefined,
+    certificate?: Certificate,
+    zone?: pulumi.Output<GetZoneResult>,
+    combinedDomain?: string
 ) {
     if (combinedDomain && zone) {
         const record = new aws.route53.Record(combinedDomain, {

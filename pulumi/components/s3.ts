@@ -3,15 +3,15 @@ import * as synced_folder from "@pulumi/synced-folder";
 
 export function createWebsiteBucket(
     path: string,
-    indexDocument: string,
-    errorDocument: string
+    indexDocument?: string,
+    errorDocument?: string
 ) {
     const bucket = new aws.s3.BucketV2("bucket");
 
     const bucketWebsite = new aws.s3.BucketWebsiteConfigurationV2("bucketWebsite", {
         bucket: bucket.bucket,
-        indexDocument: { suffix: indexDocument },
-        errorDocument: { key: errorDocument },
+        indexDocument: indexDocument ? { suffix: indexDocument } : undefined,
+        errorDocument: errorDocument ? { key: errorDocument } : undefined,
     });
 
     const ownershipControls = new aws.s3.BucketOwnershipControls("ownership-controls", {
