@@ -8,12 +8,14 @@ export function getConfig() {
     const errorDocument = config.get("errorDocument");
     const domain = config.get("domain");
     const subDomain = config.get("subDomain");
+    const priceClass = config.get("priceClass");
 
     return {
         path,
         indexDocument,
         errorDocument,
         domain,
-        subDomain
+        subDomain,
+        priceClass
     };
 }

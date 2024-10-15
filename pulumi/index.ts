@@ -4,11 +4,11 @@ import { createWebsiteBucket } from "./components/s3";
 import { createCustomDomain, createCustomDomainCdnRecord } from "./components/route53";
 import { createCdn } from "./components/cloudfront";
 
-const { path, indexDocument, errorDocument, domain, subDomain } = getConfig();
+const { path, indexDocument, errorDocument, domain, subDomain, priceClass } = getConfig();
 
 const { bucket, bucketWebsite } = createWebsiteBucket(path, indexDocument, errorDocument);
 const { zone, certificate, combinedDomain } = createCustomDomain(domain, subDomain);
-const cdn = createCdn(bucket, bucketWebsite, certificate, combinedDomain, errorDocument);
+const cdn = createCdn(bucket, bucketWebsite, priceClass, certificate, combinedDomain, errorDocument);
 const record = createCustomDomainCdnRecord(cdn, certificate, zone, combinedDomain);
 
 export const originURL = pulumi.interpolate`http://${bucketWebsite.websiteEndpoint}`;

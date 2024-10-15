@@ -5,6 +5,7 @@ import { BucketV2, BucketWebsiteConfigurationV2 } from "@pulumi/aws/s3";
 export function createCdn(
     bucket: BucketV2,
     bucketWebsite: BucketWebsiteConfigurationV2,
+    priceClass: string,
     certificate?: Certificate,
     combinedDomain?: string,
     errorDocument?: string,
@@ -52,7 +53,7 @@ export function createCdn(
                 },
             },
         },
-        priceClass: "PriceClass_100",
+        priceClass: priceClass,
         customErrorResponses: errorDocument ? [{
             errorCode: 404,
             responseCode: 404,
