@@ -19,6 +19,8 @@ export function createLambda(
         code: new pulumi.asset.AssetArchive({
             ".": new pulumi.asset.FileArchive("/home/runner/work/fullstack/fullstack/backend/bootstrap"),
         }),
+        architectures: ["arm64"],
+        timeout: 5,
         environment: {
             variables: {
                 RUST_BACKTRACE: "1",
