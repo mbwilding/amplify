@@ -15,18 +15,12 @@ jobs:
     name: Backend
     runs-on: ubuntu-latest
     steps:
-      - name: Install Brew
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
-          echo >> /home/runner/.bashrc
-          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/runner/.bashrc
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-      - name: Install Cargo Lambda
-        run: |
-          brew tap cargo-lambda/cargo-lambda
-          brew install cargo-lambda
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: mlugg/setup-zig@v1
+      - uses: zerj9/setup-cargo-lambda@v0.1.1
       - name: Build
-        run: cargo build --release --locked --manifest-path axum/Cargo.toml
+        run: cargo lambda build --arm64 --release --locked --manifest-path axum/Cargo.toml
   Pulumi:
     name: Pulumi
     runs-on: ubuntu-latest
