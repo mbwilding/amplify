@@ -71,7 +71,7 @@ export function createCustomDomainCdnRecord(
         const record = new aws.route53.Record(domain, {
             name: domain,
             zoneId: zone.zoneId,
-            type: "A",
+            type: aws.route53.RecordType.A,
             aliases: [
                 {
                     name: cdn.domainName,
@@ -93,21 +93,28 @@ export function createCustomDomainApiRecord(
     zone?: pulumi.Output<GetZoneResult>,
     domain?: string
 ) {
+
+    let target = functionUrl.functionUrl.apply(url =>
+        url.replace(/^https?:\/\/|\/$/g, '')
+    );
+
+    console.log("Target: ", target);
+
     if (domain && zone) {
         const record = new aws.route53.Record(domain, {
             name: domain,
             zoneId: zone.zoneId,
-            type: "A",
+            type: aws.route53.RecordType.A,
             aliases: [
                 {
-                    name: functionUrl.functionUrl,
+                    name: target,
                     zoneId: zone.zoneId,
                     evaluateTargetHealth: false,
                 },
             ],
         }, { dependsOn: certificate });
 
-        return record;
+        return record
     }
 
     return undefined;
