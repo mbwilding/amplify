@@ -16,9 +16,7 @@ export function createLambda(
         runtime: "provided.al2023",
         role: role.arn,
         handler: "bootstrap",
-        code: new pulumi.asset.AssetArchive({
-            ".": new pulumi.asset.FileArchive("/home/runner/work/fullstack/fullstack/backend/bootstrap"),
-        }),
+        code: new pulumi.asset.FileArchive("/home/runner/work/fullstack/fullstack/backend/bootstrap.zip"),
         architectures: ["arm64"],
         timeout: 5,
         environment: {
