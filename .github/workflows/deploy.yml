@@ -16,7 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Brew
-        run: curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+          eval "$($HOME/.linuxbrew/bin/brew shellenv)"
       - name: Install Cargo Lambda
         run: |
           brew tap cargo-lambda/cargo-lambda
