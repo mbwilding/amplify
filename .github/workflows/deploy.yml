@@ -41,7 +41,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
       - name: Build Website
-        run: bunx --bun vite build
+        run: (cd frontend && bunx --bun vite build)
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
