@@ -12,14 +12,13 @@ export function createCustomDomains(
     const domainWebsite = subDomainWebsite && domain ? `${subDomainWebsite}.${domain}` : (subDomainWebsite || domain || undefined);
     const domainApi = subDomainApi && domain ? `${subDomainApi}.${domain}` : (subDomainApi || domain || undefined);
 
-    let certificateWebsite: Certificate | undefined;
-    let certificateApi: Certificate | undefined;
-    let zone: pulumi.Output<GetZoneResult> | undefined;
+    console.log("Website: ", domainWebsite)
+    console.log("API: ", domainApi)
 
-    function createCertificateAndValidation(domainName: string, typeName: string) {
-        const zone = aws.route53.getZoneOutput({ name: domain });
+    const zone = aws.route53.getZoneOutput({ name: domain });
 
-        const certificate = new aws.acm.Certificate(`certificate-${typeName}`,
+    function createCertificateAndValidation(domainName: string, typeName: string): Certificate {
+        const certificate = new Certificate(`certificate-${typeName}`,
             {
                 domainName: domainName,
                 validationMethod: "DNS",
@@ -32,21 +31,26 @@ export function createCustomDomains(
         );
 
         const validationOption = certificate.domainValidationOptions[0];
-        return new aws.route53.Record(`certificate-validation-${typeName}`, {
+
+        const validation = new aws.route53.Record(`certificate-validation-${typeName}`, {
             name: validationOption.resourceRecordName,
             type: validationOption.resourceRecordType,
             records: [validationOption.resourceRecordValue],
             zoneId: zone.zoneId,
             ttl: 60,
         });
+
+        return certificate
     }
 
+    let certificateWebsite: Certificate | undefined;
     if (domainWebsite) {
-        createCertificateAndValidation(domainWebsite, "website");
+        certificateWebsite = createCertificateAndValidation(domainWebsite, "website");
     }
 
+    let certificateApi: Certificate | undefined;
     if (domainApi) {
-        createCertificateAndValidation(domainApi, "api");
+        certificateApi = createCertificateAndValidation(domainApi, "api");
     }
 
     return {

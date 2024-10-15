@@ -7,11 +7,11 @@ export function createCdn(
     bucketWebsite: BucketWebsiteConfigurationV2,
     certificate?: Certificate,
     priceClass?: string,
-    combinedDomain?: string,
+    domain?: string,
     errorDocument?: string,
 ) {
     const cdn = new aws.cloudfront.Distribution("cdn", {
-        aliases: combinedDomain ? [combinedDomain] : [],
+        aliases: domain ? [domain] : [],
         viewerCertificate: certificate ? {
             cloudfrontDefaultCertificate: false,
             acmCertificateArn: certificate.arn,
