@@ -35,28 +35,22 @@ jobs:
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
-      - name: Test
+      - name: Set Variables
+        run: echo "PULUMI_GLOBALS=--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Package Restore
+        run: bun install --frozen-lockfile --cwd $PULUMI_DIRECTORY
+      - name: Update Stack
         run: |
-          ls /home/runner/work/fullstack/fullstack
-          ls /home/runner/work/fullstack/fullstack/backend
-      # - name: Set Variables
-      #   run: echo "PULUMI_GLOBALS=--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
-      # - uses: actions/checkout@v4
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-region: ${{ secrets.AWS_REGION }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      # - name: Install Bun
-      #   uses: oven-sh/setup-bun@v2
-      #   with:
-      #     bun-version: latest
-      # - name: Package Restore
-      #   run: bun install --frozen-lockfile --cwd $PULUMI_DIRECTORY
-
-      # - name: Create Stack
-      #   run: pulumi stack init $PULUMI_GLOBALS 2> /dev/null
-
-      # - name: Update Stack
-      #   run: pulumi up --yes --skip-preview --suppress-outputs $PULUMI_GLOBALS
+          # pulumi stack init $PULUMI_GLOBALS 2> /dev/null
+          pulumi up --yes --skip-preview --suppress-outputs $PULUMI_GLOBALS
