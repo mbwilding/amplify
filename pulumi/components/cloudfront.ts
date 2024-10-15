@@ -52,6 +52,7 @@ export function createWebsiteCdn(
                 cookies: {
                     forward: "all",
                 },
+                headers: ["*"],
             },
         },
         priceClass: priceClass,
