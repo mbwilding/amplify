@@ -1,7 +1,7 @@
 import * as aws from "@pulumi/aws";
 import { Certificate } from "@pulumi/aws/acm";
 import { BucketV2, BucketWebsiteConfigurationV2 } from "@pulumi/aws/s3";
-import { WebAcl } from "@pulumi/aws/waf";
+import { WebAcl } from "@pulumi/aws/wafv2";
 
 export function createWebsiteCdn(
     webAcl: WebAcl,
