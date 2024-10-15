@@ -36,6 +36,10 @@ jobs:
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
+        with:
+          path: pulumi
+      - name: Zip Lambda
+        run: (cd pulumi && zip bootstrap.zip bootstrap && pwd && ls)
       - uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -51,7 +55,6 @@ jobs:
         run: bun install --frozen-lockfile --cwd $PULUMI_DIRECTORY
       - name: Update Stack
         run: |
-          (cd /home/runner/work/fullstack/fullstack/backend && zip bootstrap.zip bootstrap && pwd && ls)
           pulumiGlobal="--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY"
           pulumi stack init $pulumiGlobal || true
           pulumi up --yes --skip-preview --suppress-outputs $pulumiGlobal
