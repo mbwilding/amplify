@@ -8,15 +8,27 @@ on:
 env:
   PULUMI_DIRECTORY: pulumi
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  STACK_NAME: fullstack
 
 jobs:
-  preview:
-    name: Deploy
+  backend:
+    name: Backend
     runs-on: ubuntu-latest
     steps:
-      - name: Set Variables
+      - name: Install Cargo Lambda
         run: |
-          echo "PULUMI_GLOBALS=--color always --emoji --non-interactive --stack amplify --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
+          brew tap cargo-lambda/cargo-lambda
+          brew install cargo-lambda
+      - name: Build
+        run: cargo build --release --locked --manifest-path axum/Cargo.toml
+  Pulumi:
+    name: Pulumi
+    runs-on: ubuntu-latest
+    needs:
+      - backend
+    steps:
+      - name: Set Variables
+        run: echo "PULUMI_GLOBALS=--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -29,8 +41,8 @@ jobs:
         with:
           bun-version: latest
       - name: Package Restore
-        run: bun install --cwd $PULUMI_DIRECTORY
+        run: bun install --frozen-lockfile --cwd $PULUMI_DIRECTORY
       # - name: Create Stack
       #   run: pulumi stack init $PULUMI_GLOBALS 2> /dev/null
-      - name: Update Stack
-        run: pulumi up --yes --skip-preview --suppress-outputs $PULUMI_GLOBALS
+      # - name: Update Stack
+      #   run: pulumi up --yes --skip-preview --suppress-outputs $PULUMI_GLOBALS
