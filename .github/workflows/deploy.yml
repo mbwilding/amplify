@@ -37,10 +37,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
       - name: Zip Lambda
-        run: |
-          zip bootstrap.zip /home/runner/work/fullstack/fullstack/backend/bootstrap
-          pwd
-          ls
+        run: zip bootstrap.zip /home/runner/work/fullstack/fullstack/backend/bootstrap
       - name: Set Variables
         run: echo "PULUMI_GLOBALS=--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
       - uses: actions/checkout@v4
