@@ -5,12 +5,11 @@ import { GetZoneResult } from "@pulumi/aws/route53";
 import { Distribution } from "@pulumi/aws/cloudfront";
 
 export function createCustomDomains(
+    zone: pulumi.Output<GetZoneResult>,
     domain?: string,
-    subDomain?: string,
+    subDomain?: string
 ) {
     const domainWebsite = subDomain && domain ? `${subDomain}.${domain}` : (subDomain || domain || undefined);
-
-    const zone = aws.route53.getZoneOutput({ name: domain });
 
     function createCertificateAndValidation(domainName: string, typeName: string): Certificate {
         const certificate = new Certificate(`certificate-${typeName}`,
@@ -44,7 +43,6 @@ export function createCustomDomains(
     }
 
     return {
-        zone,
         certificateWebsite,
         domainWebsite,
     }

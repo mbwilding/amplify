@@ -1,15 +1,19 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as aws from "@pulumi/aws";
 import { getConfig } from "./config"
 import { createWebsiteBucket } from "./components/s3";
 import { createCustomDomains, createCustomDomainCdnRecord } from "./components/route53";
-import { createCdn } from "./components/cloudfront";
+import { createWebsiteCdn } from "./components/cloudfront";
 import { createLambda } from "./components/lambda";
+import { createWafAcl } from "./components/waf";
 
 const { path, indexDocument, errorDocument, domain, subDomain, priceClass } = getConfig();
+const zone = aws.route53.getZoneOutput({ name: domain });
 
 const { bucket, bucketWebsite } = createWebsiteBucket(path, indexDocument, errorDocument);
-const { zone, certificateWebsite, domainWebsite } = createCustomDomains(domain, subDomain);
-const cdn = createCdn(bucket, bucketWebsite, certificateWebsite, priceClass, domainWebsite, errorDocument);
+const { certificateWebsite, domainWebsite } = createCustomDomains(zone, domain, subDomain);
+const webAcl = createWafAcl();
+const cdn = createWebsiteCdn(webAcl, bucket, bucketWebsite, certificateWebsite, priceClass, domainWebsite, errorDocument);
 const recordCdn = createCustomDomainCdnRecord(cdn, certificateWebsite, zone, domainWebsite);
 
 const { lambda, functionUrl } = createLambda();

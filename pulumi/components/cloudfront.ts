@@ -1,8 +1,10 @@
 import * as aws from "@pulumi/aws";
 import { Certificate } from "@pulumi/aws/acm";
 import { BucketV2, BucketWebsiteConfigurationV2 } from "@pulumi/aws/s3";
+import { WebAcl } from "@pulumi/aws/waf";
 
-export function createCdn(
+export function createWebsiteCdn(
+    webAcl: WebAcl,
     bucket: BucketV2,
     bucketWebsite: BucketWebsiteConfigurationV2,
     certificate?: Certificate,
@@ -64,6 +66,7 @@ export function createCdn(
                 restrictionType: "none",
             },
         },
+        webAclId: webAcl.id
     });
 
     return cdn
