@@ -3,15 +3,12 @@ import * as aws from "@pulumi/aws";
 import { Certificate } from "@pulumi/aws/acm";
 import { GetZoneResult } from "@pulumi/aws/route53";
 import { Distribution } from "@pulumi/aws/cloudfront";
-import { FunctionUrl } from "@pulumi/aws/lambda";
 
 export function createCustomDomains(
     domain?: string,
-    subDomainWebsite?: string,
-    subDomainApi?: string
+    subDomain?: string,
 ) {
-    const domainWebsite = subDomainWebsite && domain ? `${subDomainWebsite}.${domain}` : (subDomainWebsite || domain || undefined);
-    const domainApi = subDomainApi && domain ? `${subDomainApi}.${domain}` : (subDomainApi || domain || undefined);
+    const domainWebsite = subDomain && domain ? `${subDomain}.${domain}` : (subDomain || domain || undefined);
 
     const zone = aws.route53.getZoneOutput({ name: domain });
 
@@ -46,17 +43,10 @@ export function createCustomDomains(
         certificateWebsite = createCertificateAndValidation(domainWebsite, "website");
     }
 
-    let certificateApi: Certificate | undefined;
-    if (domainApi) {
-        certificateApi = createCertificateAndValidation(domainApi, "api");
-    }
-
     return {
         zone,
         certificateWebsite,
         domainWebsite,
-        certificateApi,
-        domainApi,
     }
 }
 
@@ -85,37 +75,4 @@ export function createCustomDomainCdnRecord(
     }
 
     return undefined
-}
-
-export function createCustomDomainApiRecord(
-    functionUrl: FunctionUrl,
-    certificate?: Certificate,
-    zone?: pulumi.Output<GetZoneResult>,
-    domain?: string
-) {
-
-    let target = functionUrl.functionUrl.apply(url =>
-        url.replace(/^https?:\/\/|\/$/g, '')
-    );
-
-    console.log("Target: ", target);
-
-    if (domain && zone) {
-        const record = new aws.route53.Record(domain, {
-            name: domain,
-            zoneId: zone.zoneId,
-            type: aws.route53.RecordType.A,
-            aliases: [
-                {
-                    name: target,
-                    zoneId: zone.zoneId,
-                    evaluateTargetHealth: false,
-                },
-            ],
-        }, { dependsOn: certificate });
-
-        return record
-    }
-
-    return undefined;
 }
