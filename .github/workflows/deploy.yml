@@ -52,5 +52,5 @@ jobs:
         run: bun install --frozen-lockfile --cwd $PULUMI_DIRECTORY
       - name: Update Stack
         run: |
-          # pulumi stack init $PULUMI_GLOBALS 2> /dev/null
+          pulumi stack init $PULUMI_GLOBALS 2> /dev/null
           pulumi up --yes --skip-preview --suppress-outputs $PULUMI_GLOBALS
