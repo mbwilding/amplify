@@ -3,6 +3,7 @@ import * as aws from "@pulumi/aws";
 import { Certificate } from "@pulumi/aws/acm";
 import { GetZoneResult } from "@pulumi/aws/route53";
 import { Distribution } from "@pulumi/aws/cloudfront";
+import { FunctionUrl } from "@pulumi/aws/lambda";
 
 export function createCustomDomains(
     domain?: string,
@@ -11,9 +12,6 @@ export function createCustomDomains(
 ) {
     const domainWebsite = subDomainWebsite && domain ? `${subDomainWebsite}.${domain}` : (subDomainWebsite || domain || undefined);
     const domainApi = subDomainApi && domain ? `${subDomainApi}.${domain}` : (subDomainApi || domain || undefined);
-
-    console.log("Website: ", domainWebsite)
-    console.log("API: ", domainApi)
 
     const zone = aws.route53.getZoneOutput({ name: domain });
 
@@ -87,4 +85,30 @@ export function createCustomDomainCdnRecord(
     }
 
     return undefined
+}
+
+export function createCustomDomainApiRecord(
+    functionUrl: FunctionUrl,
+    certificate?: Certificate,
+    zone?: pulumi.Output<GetZoneResult>,
+    domain?: string
+) {
+    if (domain && zone) {
+        const record = new aws.route53.Record(domain, {
+            name: domain,
+            zoneId: zone.zoneId,
+            type: "A",
+            aliases: [
+                {
+                    name: functionUrl.functionUrl,
+                    zoneId: zone.zoneId,
+                    evaluateTargetHealth: false,
+                },
+            ],
+        }, { dependsOn: certificate });
+
+        return record;
+    }
+
+    return undefined;
 }
