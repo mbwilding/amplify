@@ -25,7 +25,7 @@ export function createCustomDomains(
                 validationMethod: "DNS",
             },
             {
-                provider: new aws.Provider("us-east-provider", {
+                provider: new aws.Provider(`us-east-provider-${typeName}`, {
                     region: "us-east-1",
                 }),
             },

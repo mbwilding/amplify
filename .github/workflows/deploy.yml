@@ -30,17 +30,35 @@ jobs:
         with:
           name: backend
           path: backend/target/lambda/axum/bootstrap
-          retention-days: 5
+          retention-days: 1
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Build Website
+        run: bunx --bun vite build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend
+          path: frontend/dist/
+          retention-days: 1
 
   pulumi:
     name: Pulumi
     runs-on: ubuntu-latest
     needs:
       - backend
+      - frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download Artifacts
+      - name: Download Frontend Artifacts
         uses: actions/download-artifact@v4
         with:
           path: pulumi
