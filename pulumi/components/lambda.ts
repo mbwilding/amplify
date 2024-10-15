@@ -26,5 +26,13 @@ export function createLambda(
         },
     });
 
-    return lambda
+    const functionUrl = new aws.lambda.FunctionUrl("rustApiUrl", {
+        functionName: lambda.name,
+        authorizationType: "NONE",
+    });
+
+    return {
+        lambda,
+        functionUrl
+    }
 }

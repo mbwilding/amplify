@@ -45,7 +45,7 @@ jobs:
         with:
           path: pulumi
       - name: Zip Lambda
-        run: (cd pulumi/backend && zip bootstrap.zip bootstrap && pwd && ls)
+        run: (cd pulumi/backend && zip bootstrap.zip bootstrap)
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
