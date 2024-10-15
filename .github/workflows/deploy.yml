@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backend
-          path: **/bootstrap
+          path: axum/target/lambda/axum/bootstrap
           retention-days: 5
   Pulumi:
     name: Pulumi
