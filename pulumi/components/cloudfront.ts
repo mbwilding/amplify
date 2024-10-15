@@ -4,7 +4,6 @@ import { BucketV2, BucketWebsiteConfigurationV2 } from "@pulumi/aws/s3";
 import { WebAcl } from "@pulumi/aws/wafv2";
 
 export function createWebsiteCdn(
-    webAcl: WebAcl,
     bucket: BucketV2,
     bucketWebsite: BucketWebsiteConfigurationV2,
     certificate?: Certificate,
@@ -66,7 +65,7 @@ export function createWebsiteCdn(
                 restrictionType: "none",
             },
         },
-        webAclId: webAcl.id
+        // webAclId: webAcl.id
     });
 
     return cdn
