@@ -15,11 +15,15 @@ jobs:
     name: Backend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: mlugg/setup-zig@v1
-      - uses: zerj9/setup-cargo-lambda@v0.1.1
-      - name: Build
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Install Zig
+        uses: mlugg/setup-zig@v1
+      - name: Install Cargo Lambda
+        uses: zerj9/setup-cargo-lambda@v0.1.1
+      - name: Build Lambda
         run: cargo lambda build --arm64 --release --locked --manifest-path axum/Cargo.toml
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -34,13 +38,14 @@ jobs:
     needs:
       - backend
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
           path: pulumi
       - name: Zip Lambda
-        run: (cd pulumi && zip bootstrap.zip bootstrap && pwd && ls)
-      - uses: actions/checkout@v4
+        run: (cd pulumi/backend && zip bootstrap.zip bootstrap && pwd && ls)
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
