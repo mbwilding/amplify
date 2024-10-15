@@ -7,7 +7,8 @@ export function getConfig() {
     const indexDocument = config.get("indexDocument");
     const errorDocument = config.get("errorDocument");
     const domain = config.get("domain");
-    const subDomain = config.get("subDomain");
+    const subDomainWebsite = config.get("subDomainWebsite");
+    const subDomainApi = config.get("subDomainApi");
     const priceClass = config.get("priceClass");
 
     return {
@@ -15,7 +16,8 @@ export function getConfig() {
         indexDocument,
         errorDocument,
         domain,
-        subDomain,
+        subDomainWebsite,
+        subDomainApi,
         priceClass
     };
 }

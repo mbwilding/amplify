@@ -4,20 +4,24 @@ import { Certificate } from "@pulumi/aws/acm";
 import { GetZoneResult } from "@pulumi/aws/route53";
 import { Distribution } from "@pulumi/aws/cloudfront";
 
-export function createCustomDomain(
+export function createCustomDomains(
     domain?: string,
-    subDomain?: string
+    subDomainWebsite?: string,
+    subDomainApi?: string
 ) {
-    const combinedDomain = subDomain && domain ? `${subDomain}.${domain}` : (subDomain || domain || undefined);
-    let certificate: Certificate | undefined;
+    const domainWebsite = subDomainWebsite && domain ? `${subDomainWebsite}.${domain}` : (subDomainWebsite || domain || undefined);
+    const domainApi = subDomainApi && domain ? `${subDomainApi}.${domain}` : (subDomainApi || domain || undefined);
+
+    let certificateWebsite: Certificate | undefined;
+    let certificateApi: Certificate | undefined;
     let zone: pulumi.Output<GetZoneResult> | undefined;
 
-    if (combinedDomain) {
-        zone = aws.route53.getZoneOutput({ name: domain });
+    function createCertificateAndValidation(domainName: string, typeName: string) {
+        const zone = aws.route53.getZoneOutput({ name: domain });
 
-        certificate = new aws.acm.Certificate("certificate",
+        const certificate = new aws.acm.Certificate(`certificate-${typeName}`,
             {
-                domainName: combinedDomain,
+                domainName: domainName,
                 validationMethod: "DNS",
             },
             {
@@ -28,7 +32,7 @@ export function createCustomDomain(
         );
 
         const validationOption = certificate.domainValidationOptions[0];
-        const certificateValidation = new aws.route53.Record("certificate-validation", {
+        return new aws.route53.Record(`certificate-validation-${typeName}`, {
             name: validationOption.resourceRecordName,
             type: validationOption.resourceRecordType,
             records: [validationOption.resourceRecordValue],
@@ -37,10 +41,20 @@ export function createCustomDomain(
         });
     }
 
+    if (domainWebsite) {
+        createCertificateAndValidation(domainWebsite, "website");
+    }
+
+    if (domainApi) {
+        createCertificateAndValidation(domainApi, "api");
+    }
+
     return {
         zone,
-        certificate,
-        combinedDomain
+        certificateWebsite,
+        domainWebsite,
+        certificateApi,
+        domainApi,
     }
 }
 
@@ -49,11 +63,11 @@ export function createCustomDomainCdnRecord(
     cdn: Distribution,
     certificate?: Certificate,
     zone?: pulumi.Output<GetZoneResult>,
-    combinedDomain?: string
+    domain?: string
 ) {
-    if (combinedDomain && zone) {
-        const record = new aws.route53.Record(combinedDomain, {
-            name: combinedDomain,
+    if (domain && zone) {
+        const record = new aws.route53.Record(domain, {
+            name: domain,
             zoneId: zone.zoneId,
             type: "A",
             aliases: [
