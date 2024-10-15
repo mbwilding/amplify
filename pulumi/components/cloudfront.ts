@@ -5,8 +5,8 @@ import { BucketV2, BucketWebsiteConfigurationV2 } from "@pulumi/aws/s3";
 export function createCdn(
     bucket: BucketV2,
     bucketWebsite: BucketWebsiteConfigurationV2,
-    priceClass: string,
     certificate?: Certificate,
+    priceClass?: string,
     combinedDomain?: string,
     errorDocument?: string,
 ) {

@@ -8,7 +8,7 @@ const { path, indexDocument, errorDocument, domain, subDomain, priceClass } = ge
 
 const { bucket, bucketWebsite } = createWebsiteBucket(path, indexDocument, errorDocument);
 const { zone, certificate, combinedDomain } = createCustomDomain(domain, subDomain);
-const cdn = createCdn(bucket, bucketWebsite, priceClass, certificate, combinedDomain, errorDocument);
+const cdn = createCdn(bucket, bucketWebsite, certificate, priceClass, combinedDomain, errorDocument);
 const record = createCustomDomainCdnRecord(cdn, certificate, zone, combinedDomain);
 
 export const originURL = pulumi.interpolate`http://${bucketWebsite.websiteEndpoint}`;
