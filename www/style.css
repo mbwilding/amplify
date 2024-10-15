@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'NeoSpleen';
+    src: url('assets/fonts/NeoSpleen.woff2') format('woff2');
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: 'NeoSpleen', sans-serif;
+    text-align: center;
+}
+
+marquee {
+    font-size: 60px;
+}
