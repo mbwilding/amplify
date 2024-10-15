@@ -37,9 +37,11 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
       - name: Zip Lambda
-        run: zip bootstrap.zip /home/runner/work/fullstack/fullstack/backend/bootstrap
-      - name: Set Variables
-        run: echo "PULUMI_GLOBALS=--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
+        run: |
+          zip bootstrap.zip /home/runner/work/fullstack/fullstack/backend/bootstrap
+          mv bootstrap.zip pulumi/
+          pwd
+          ls pulumi
       - uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -55,5 +57,6 @@ jobs:
         run: bun install --frozen-lockfile --cwd $PULUMI_DIRECTORY
       - name: Update Stack
         run: |
-          pulumi stack init $PULUMI_GLOBALS || true
-          pulumi up --yes --skip-preview --suppress-outputs $PULUMI_GLOBALS
+          pulumiGlobal="--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY"
+          pulumi stack init $pulumiGlobal || true
+          pulumi up --yes --skip-preview --suppress-outputs $pulumiGlobal
