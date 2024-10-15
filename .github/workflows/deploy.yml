@@ -33,6 +33,8 @@ jobs:
     needs:
       - backend
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
       - name: Set Variables
         run: echo "PULUMI_GLOBALS=--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY" >> $GITHUB_ENV
       - uses: actions/checkout@v4
