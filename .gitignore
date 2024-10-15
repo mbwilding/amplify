@@ -1,4 +1,9 @@
 **/bin/
 **/node_modules/
-**/node_modules/
+**/dist/
 **/target/
+**/logs
+**.log
+**/.vscode/*
+**/.idea
+**/.DS_Store

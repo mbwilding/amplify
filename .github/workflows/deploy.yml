@@ -24,12 +24,12 @@ jobs:
       - name: Install Cargo Lambda
         uses: zerj9/setup-cargo-lambda@v0.1.1
       - name: Build Lambda
-        run: cargo lambda build --arm64 --release --locked --manifest-path axum/Cargo.toml
+        run: cargo lambda build --arm64 --release --locked --manifest-path backend/Cargo.toml
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: backend
-          path: axum/target/lambda/axum/bootstrap
+          path: backend/target/lambda/axum/bootstrap
           retention-days: 5
 
   pulumi:

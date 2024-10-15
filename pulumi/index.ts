@@ -4,7 +4,6 @@ import { createWebsiteBucket } from "./components/s3";
 import { createCustomDomains, createCustomDomainCdnRecord } from "./components/route53";
 import { createCdn } from "./components/cloudfront";
 import { createLambda } from "./components/lambda";
-import { createRestApi } from "./components/api-gateway";
 
 const { path, indexDocument, errorDocument, domain, subDomainWebsite, subDomainApi, priceClass } = getConfig();
 
