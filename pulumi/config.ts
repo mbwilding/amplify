@@ -3,7 +3,7 @@ import * as pulumi from "@pulumi/pulumi";
 export function getConfig() {
     const config = new pulumi.Config();
 
-    const path = config.require("path");
+    const distPath = config.require("distPath");
     const indexDocument = config.get("indexDocument");
     const errorDocument = config.get("errorDocument");
     const domain = config.get("domain");
@@ -11,7 +11,7 @@ export function getConfig() {
     const priceClass = config.get("priceClass");
 
     return {
-        path,
+        distPath,
         indexDocument,
         errorDocument,
         domain,

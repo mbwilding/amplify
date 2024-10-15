@@ -2,6 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { apiUrl } from './config'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +25,19 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        <p>
+          Check console after clicking buttons
+        </p>
+        <button onClick={async () => {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+          console.log(data);
+        }}>API: / </button>
+        <button onClick={async () => {
+          const response = await fetch(`${apiUrl}foo`);
+          const data = await response.json();
+          console.log(data);
+        }}>API: foo</button>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
