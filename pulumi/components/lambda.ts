@@ -29,6 +29,13 @@ export function createLambda(
     const functionUrl = new aws.lambda.FunctionUrl("rustApiUrl", {
         functionName: lambda.name,
         authorizationType: "NONE",
+        cors: {
+            allowOrigins: ["*"],
+            allowMethods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"],
+            allowHeaders: ["*"],
+            exposeHeaders: ["*"],
+            maxAge: 300,
+        },
     });
 
     return {
