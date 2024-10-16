@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { apiUrl } from './config'
+import { fetchApi } from './components/api'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,14 +29,10 @@ function App() {
           Check console after clicking buttons
         </p>
         <button onClick={async () => {
-          const response = await fetch(apiUrl);
-          const data = await response.json();
-          console.log(data);
-        }}>API: / </button>
+          await fetchApi();
+        }}>API: /</button>
         <button onClick={async () => {
-          const response = await fetch(`${apiUrl}foo`);
-          const data = await response.json();
-          console.log(data);
+          await fetch('foo', {});
         }}>API: foo</button>
       </div>
       <p className="read-the-docs">
