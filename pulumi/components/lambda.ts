@@ -31,7 +31,7 @@ export function createLambda(
         authorizationType: "NONE",
         cors: {
             allowOrigins: ["*"],
-            allowMethods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"],
+            allowMethods: ["*"],
             allowHeaders: ["*"],
             exposeHeaders: ["*"],
             maxAge: 300,
