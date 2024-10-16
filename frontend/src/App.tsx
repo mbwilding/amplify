@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { fetchApi } from './components/api'
+import { fetchApiCount } from './components/api';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -23,16 +23,10 @@ function App() {
           count is {count}
         </button>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-        <p>
           Check console after clicking buttons
         </p>
         <button onClick={async () => {
-          await fetchApi();
-        }}>API: /</button>
-        <button onClick={async () => {
-          await fetch('foo', {});
+          await fetchApiCount(count);
         }}>API: foo</button>
       </div>
       <p className="read-the-docs">
