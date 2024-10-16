@@ -51,8 +51,7 @@ export function createWebsiteCdn(
                 queryString: true,
                 cookies: {
                     forward: "all",
-                },
-                headers: ["*"],
+                }
             },
         },
         priceClass: priceClass,
