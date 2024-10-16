@@ -22,16 +22,13 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Check console after clicking buttons
-        </p>
         <button onClick={async () => {
           await fetchApiCount(count);
-        }}>API: foo</button>
+        }}>Submit</button>
+        <p>
+          Check console logging
+        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
