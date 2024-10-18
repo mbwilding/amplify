@@ -10,7 +10,7 @@ env:
 
 jobs:
   pulumi:
-    name: Pulumi
+    name: Pulumi Destroy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
