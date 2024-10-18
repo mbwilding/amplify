@@ -1,0 +1,34 @@
+name: Pulumi
+
+on:
+  workflow_dispatch:
+
+env:
+  PULUMI_DIRECTORY: pulumi
+  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  STACK_NAME: fullstack
+
+jobs:
+  pulumi:
+    name: Pulumi
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Package Restore
+        run: bun install --frozen-lockfile --cwd $PULUMI_DIRECTORY
+      - name: Destroy Stack
+        run: |
+          pulumiGlobal="--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY"
+          pulumi destroy --yes $pulumiGlobal
+          # pulumi stack rm --yes --force $pulumiGlobal

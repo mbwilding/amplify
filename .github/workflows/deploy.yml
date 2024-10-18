@@ -60,7 +60,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download Frontend Artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
           path: pulumi
@@ -82,4 +82,4 @@ jobs:
         run: |
           pulumiGlobal="--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY"
           pulumi stack init $pulumiGlobal || true
-          pulumi up --yes --skip-preview --suppress-outputs $pulumiGlobal
+          pulumi up --yes --skip-preview $pulumiGlobal
