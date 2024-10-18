@@ -83,4 +83,4 @@ jobs:
         run: |
           pulumiGlobal="--non-interactive --color always --emoji --stack $STACK_NAME --cwd $PULUMI_DIRECTORY"
           pulumi stack init $pulumiGlobal || true
-          pulumi up --yes --skip-preview $pulumiGlobal
+          pulumi up --yes --skip-preview --suppress-outputs $pulumiGlobal
